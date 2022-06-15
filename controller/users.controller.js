@@ -2,13 +2,24 @@ const User = require("../models/user.model");
 
 const getAllUser = async (req, res) => {
   try {
+    var users;
     const page = parseInt(req.query.page);
     const limit = parseInt(req.query.limit);
+    const search = req.query.search;
+
+    if (search) {
+      users = await User.find({
+        $or: [
+          { first_name: { $regex: search } },
+          { last_name: { $regex: search } },
+        ],
+      });
+    } else {
+      users = await User.find({});
+    }
 
     const startIdex = (page - 1) * limit;
     const endIndex = page * limit;
-
-    const users = await User.find({});
 
     const resuals = {};
 

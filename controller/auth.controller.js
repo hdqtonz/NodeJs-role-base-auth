@@ -6,7 +6,7 @@ const userRegister = async (req, res) => {
   try {
     const { first_name, last_name, email, password, age, role } = req.body;
 
-    if (!(email && password && first_name && last_name && role)) {
+    if (!(email && password && first_name && last_name)) {
       res.status(400).send("All input is required");
     }
 
@@ -29,7 +29,7 @@ const userRegister = async (req, res) => {
 
     // Create toke
     const token = jwt.sign({ user_id: user.id, email }, process.env.TOKEN_KEY, {
-      expiresIn: "1d",
+      expiresIn: "1h",
     });
 
     user.token = token;
@@ -57,7 +57,7 @@ const userLogin = async (req, res) => {
         { user_id: user._id, email },
         process.env.TOKEN_KEY,
         {
-          expiresIn: "1d",
+          expiresIn: "1h",
         }
       );
 
